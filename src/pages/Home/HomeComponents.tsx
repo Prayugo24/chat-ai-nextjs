@@ -1,10 +1,10 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Image from "next/image"
 import iconChat from "../../assets/images/iconChat.jpg"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SidebarMiniComponent } from '@/components/sidebar/SidebarMiniComponent';
-import { IChatSession, SidebarComponents } from '@/components/sidebar/SidebarComponent';
+import { SidebarComponents } from '@/components/sidebar/SidebarComponent';
 import { faPaperclip,faArrowCircleUp  } from '@fortawesome/free-solid-svg-icons';
 
 
@@ -17,7 +17,7 @@ export interface IMessage {
   sender: 'user' | 'system';
 }
 
-export const HomeComponents = () => {
+const HomeComponents = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [message, setMessage] = useState<string>(''); 
   const [messages, setMessages] = useState<IMessage[]>([]); 
@@ -102,7 +102,7 @@ export const HomeComponents = () => {
 
 
       <main className="flex-1 flex flex-col h-full relative">
-      <header className="p-4 border-b border-gray-200 shadow-md sm:p-6 md:p-8 z-20">
+        <header className="p-4 border-b border-gray-200 shadow-md sm:p-6 md:p-8 z-20">
           <h1 className="text-lg font-medium">Greeting and Offer of Assistance</h1>
         </header>
         <div className="flex-1 overflow-y-auto p-4">
@@ -224,3 +224,4 @@ export const HomeComponents = () => {
     </div>
   );
 };
+export default HomeComponents;

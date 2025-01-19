@@ -3,7 +3,7 @@ import Image from "next/image"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRightFromBracket, faFileCirclePlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect, useState } from 'react';
-import { IMessage } from "@/pages/Home/HomeComponent";
+import { IMessage } from "@/pages/Home/HomeComponents";
 
 interface ISidebarComponent {
     isSidebarOpen: boolean;
