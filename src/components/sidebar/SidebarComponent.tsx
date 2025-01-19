@@ -9,7 +9,7 @@ interface ISidebarComponent {
     isSidebarOpen: boolean;
     messages: IMessage[];
     setIsSidebarOpen: (isOpen : boolean) => void;
-    setMessages: (messages: any[]) => void;
+    setMessages: (messages: IMessage[]) => void;
     setIsSave: (isSave: boolean) => void;
 
 }
