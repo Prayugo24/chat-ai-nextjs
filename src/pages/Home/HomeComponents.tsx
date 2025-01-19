@@ -5,7 +5,7 @@ import iconChat from "../../assets/images/iconChat.jpg"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SidebarMiniComponent } from '@/components/sidebar/SidebarMiniComponent';
 import { SidebarComponents } from '@/components/sidebar/SidebarComponent';
-import { faPaperclip,faArrowCircleUp  } from '@fortawesome/free-solid-svg-icons';
+import { faPaperclip,faArrowCircleUp,faBars  } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -102,8 +102,13 @@ const HomeComponents = () => {
 
 
       <main className="flex-1 flex flex-col h-full relative">
-        <header className="p-4 border-b border-gray-200 shadow-md sm:p-6 md:p-8 z-20">
-          <h1 className="text-lg font-medium">Greeting and Offer of Assistance</h1>
+        <header className="flex p-4 border-b border-gray-200 shadow-md sm:p-6 md:p-8 z-20 justify-between">
+          <h1 className="text-lg font-medium">Greeting and Offer of Assistance yugioh kolang</h1>
+          <button 
+            className="md:hidden top-4 left-4 z-50 p-2"
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+          <FontAwesomeIcon icon={faBars} className="text-gray-700" />
+        </button>
         </header>
         <div className="flex-1 overflow-y-auto p-4">
           <div className="max-w-3xl mx-auto space-y-6 w-full px-2 sm:px-4">

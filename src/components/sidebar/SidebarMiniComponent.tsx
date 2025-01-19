@@ -16,7 +16,7 @@ export const SidebarMiniComponent = (
         <nav
             className={`fixed md:relative bg-white border-r border-gray-200 h-full flex flex-col z-50 transition-all duration-300 ${
                 isSidebarOpen ? "hidden" : "w-16"
-            }`}
+            } md:translate-x-0 z-100 -translate-x-full`}
             >
             <div className="flex flex-col space-y-4 p-2">
                 <div className="p-2">

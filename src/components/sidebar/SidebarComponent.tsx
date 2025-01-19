@@ -2,8 +2,9 @@
 import Image from "next/image"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRightFromBracket, faFileCirclePlus, faTrash } from '@fortawesome/free-solid-svg-icons';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { IMessage } from "@/pages/Home/HomeComponents";
+import { useSideBar } from "@/hooks/useSidebar";
 
 interface ISidebarComponent {
     isSidebarOpen: boolean;
@@ -14,92 +15,22 @@ interface ISidebarComponent {
 
 }
 
-export interface IChatSession {
-  id: string;
-  messages: IMessage[]; // Perbaiki properti menjadi `messages`
-  timestamp: string;
-  isSave: boolean;
-}
 export const SidebarComponents = (
-  {isSidebarOpen, messages,setIsSidebarOpen, setMessages, setIsSave} : ISidebarComponent
+  {isSidebarOpen, messages ,setIsSidebarOpen, setMessages, setIsSave} : ISidebarComponent
 ) => {
-    const [chatHistory, setChatHistory] = useState<IChatSession[]>([]);
-
-    useEffect(() => {
-      const savedChatHistory = JSON.parse(localStorage.getItem('chatHistory') || '[]');
-      const validChatHistory = savedChatHistory.filter((session: IChatSession) => 
-        session.id && session.messages && Array.isArray(session.messages) && session.timestamp
-      );
-  
-      setChatHistory(validChatHistory);
-    }, []);
-    const groupChatHistoryByDate = (chatHistory: IChatSession[]) => {
-      const today = new Date();
-      const yesterday = new Date(today);
-      yesterday.setDate(yesterday.getDate() - 1);
-  
-      const groupedChats = {
-        today: [] as IChatSession[],
-        yesterday: [] as IChatSession[],
-        last7Days: [] as IChatSession[],
-      };
-  
-      chatHistory.forEach((session) => {
-        const sessionDate = new Date(Number(session.id)); 
-  
-        if (sessionDate.toDateString() === today.toDateString()) {
-          groupedChats.today.push(session);
-        } else if (sessionDate.toDateString() === yesterday.toDateString()) {
-          groupedChats.yesterday.push(session);
-        } else if (sessionDate > new Date(today.setDate(today.getDate() - 7))) {
-          groupedChats.last7Days.push(session);
-        }
-      });
-  
-      return groupedChats;
-    };
-    const deleteChatSession = (sessionId: string) => {
-      const savedChatHistory = JSON.parse(localStorage.getItem('chatHistory') || '[]');
-      const updatedChatHistory = savedChatHistory.filter((session: IChatSession) => session.id !== sessionId);
-      localStorage.setItem('chatHistory', JSON.stringify(updatedChatHistory));
-      setChatHistory(updatedChatHistory);
-    };
-    const deleteAllChatSessions = () => {
-      localStorage.removeItem('chatHistory');
-      setChatHistory([]);
-    };
-  
-    const handleNewChat = () => {
-      const sessionId = Date.now().toString();
-      const newSession: IChatSession = {
-        id: sessionId,
-        messages: messages,
-        timestamp: new Date().toLocaleString(),
-        isSave: true
-      };
-      const savedChatHistory = JSON.parse(localStorage.getItem('chatHistory') || '[]');
-      const updatedChatHistory = [...savedChatHistory, newSession];
-      const sortedChatHistory = updatedChatHistory.sort((a, b) => Number(b.id) - Number(a.id));
-      localStorage.setItem('chatHistory', JSON.stringify(updatedChatHistory));
-      setChatHistory(sortedChatHistory);
-      setMessages([]);
-      setIsSave(false)
-    };
-  
-    const loadChatSession = (sessionId: string) => {
-      const session = chatHistory.find((s: IChatSession) => s.id === sessionId);
-      if (session) {
-        setMessages(session.messages);
-        setIsSave(session.isSave)
-      }
-    };
-    const groupedChats = groupChatHistoryByDate(chatHistory);
-
+    const { 
+      handleNewChat,
+      deleteAllChatSessions, 
+      deleteChatSession, 
+      groupedChats, 
+      loadChatSession
+    } = useSideBar(messages, setMessages, setIsSave)
+    
     return (
       <nav
           className={`chat-sidebar fixed md:relative bg-white border-r border-gray-200 h-full flex flex-col z-50 transition-all duration-300 ${
             isSidebarOpen ? "w-64" : "hidden"
-          }`}
+          } md:translate-x-0 z-100 -translate-x-full`}
         >
           <div className="flex p-4 border-b border-gray-200">
             <Image
@@ -230,4 +161,6 @@ export const SidebarComponents = (
         </nav>
     )
 }
+
+
 
