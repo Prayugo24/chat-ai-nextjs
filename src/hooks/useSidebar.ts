@@ -2,7 +2,7 @@ import { IMessage } from "@/pages/Home/HomeComponents";
 import { useEffect, useState } from 'react';
 
 
-export interface IChatSession {
+interface IChatSession {
   id: string;
   messages: IMessage[]; 
   timestamp: string;
@@ -14,6 +14,7 @@ export const useSideBar = (
     message: IMessage[],
     setMessages: (messages: IMessage[]) => void,
     setIsSave: (isSave: boolean) => void,
+    setIsHiddenMenuMobile:(isOpen : boolean) => void
 ) =>{
     const [chatHistory, setChatHistory] = useState<IChatSession[]>([]);
     
@@ -76,13 +77,16 @@ export const useSideBar = (
         setChatHistory(sortedChatHistory);
         setMessages([]);
         setIsSave(false)
+        setIsHiddenMenuMobile(true)
     };
     
     const loadChatSession = (sessionId: string) => {
         const session = chatHistory.find((s: IChatSession) => s.id === sessionId);
         if (session) {
-        setMessages(session.messages);
-        setIsSave(session.isSave)
+            setMessages(session.messages);
+            setIsSave(session.isSave)
+            setIsHiddenMenuMobile(true)
+            
         }
     };
     const groupedChats = groupChatHistoryByDate(chatHistory);

@@ -1,6 +1,8 @@
 import Image from "next/image"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRightFromBracket, faFileCirclePlus  } from '@fortawesome/free-solid-svg-icons';
+import auraChatLogo from "../../assets/images/AuraChatSmallIcon.png"
+
 
 interface ISidebarMiniComponent {
     isSidebarOpen: boolean;
@@ -21,11 +23,9 @@ export const SidebarMiniComponent = (
             <div className="flex flex-col space-y-4 p-2">
                 <div className="p-2">
                 <Image
-                    src="https://ai-public.creatie.ai/gen_page/logo_placeholder.png"
+                    src={auraChatLogo}
                     alt="DeepSeek"
-                    width={32}
-                    height={32}
-                    className="w-8 h-8"
+                    className="w-full h-auto"
                 />
                 </div>
                 <div className="p-2">

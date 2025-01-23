@@ -1,7 +1,7 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from "next/image"
-import iconChat from "../../assets/images/iconChat.jpg"
+import iconChat from "../../assets/images/iconChat2.png"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SidebarMiniComponent } from '@/components/sidebar/SidebarMiniComponent';
 import { SidebarComponents } from '@/components/sidebar/SidebarComponent';
@@ -11,6 +11,7 @@ import { faPaperclip,faArrowCircleUp,faBars  } from '@fortawesome/free-solid-svg
 
 import "@/styles/ChatMotion.css"
 import { ApiChat } from '@/lib/service';
+import { SidebarMobileComponents } from '@/components/sidebar/SidebarMobileComponent';
 
 export interface IMessage {
   text: string;
@@ -24,11 +25,20 @@ const HomeComponents = () => {
   const [isSave, setIsSave] = useState<boolean>(false);
   const [showPopup, setShowPopup] = useState<boolean>(false); 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isDisableTextArea, setisDisableTextArea] = useState<boolean>(false);
   const [typingText, setTypingText] = useState<string>(""); // State untuk efek typing
+  const [isHiddenMenuMobile, setIsHiddenMenuMobile] = useState(true)
+
+
+  useEffect(()=> {
+    startTypingEffect("Hi! Nice to talk to you. Can I help you? 😄")
+  },[])
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+  
+
   const handleSendMessage = async() => {
     if (message.trim()) {
       try{
@@ -36,11 +46,10 @@ const HomeComponents = () => {
           ...prevMessages,
           { text: message, sender: 'user' },
         ]);
+        setisDisableTextArea(true)
         setMessage('');
         setIsLoading(true)
         const messageSystem = await ApiChat.getMessage(message)
-
-        console.log(messageSystem)
 
         setTimeout(() => {
           startTypingEffect(messageSystem.data[0]);
@@ -67,6 +76,7 @@ const HomeComponents = () => {
           { text: text, sender: "system" },
         ]);
         setTypingText("");
+        setisDisableTextArea(false)
       }
     }, 50); 
   };
@@ -93,6 +103,7 @@ const HomeComponents = () => {
         setMessages={setMessages}
         setIsSidebarOpen={toggleSidebar}
         setIsSave={setIsSave}
+        setIsHiddenMenuMobile={setIsHiddenMenuMobile}
       />
 
       {/* Sidebar Mini */}
@@ -100,15 +111,24 @@ const HomeComponents = () => {
         isSidebarOpen={isSidebarOpen} 
         setIsSidebarOpen={toggleSidebar}/>
 
+      {/* sidebar mobile */}
+      <SidebarMobileComponents
+        isHiddenMenuMobile={isHiddenMenuMobile} 
+        messages={messages}
+        setIsSave={setIsSave}
+        setMessages={setMessages}
+        setIsHiddenMenuMobile={setIsHiddenMenuMobile}
+      />
+
 
       <main className="flex-1 flex flex-col h-full relative">
-        <header className="flex p-4 border-b border-gray-200 shadow-md sm:p-6 md:p-8 z-20 justify-between">
-          <h1 className="text-lg font-medium">Greeting and Offer of Assistance yugioh kolang</h1>
+        <header className="flex p-4  sm:p-6 md:p-4 z-20 justify-between">
+          {/* <h1 className="text-lg font-medium"></h1> */}
           <button 
-            className="md:hidden top-4 left-4 z-50 p-2"
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
-          <FontAwesomeIcon icon={faBars} className="text-gray-700" />
-        </button>
+            className={`${!isHiddenMenuMobile ? "hidden":""} md:hidden top-4 left-4 z-50 p-2`}
+            onClick={() => setIsHiddenMenuMobile(false)}>
+            <FontAwesomeIcon icon={faBars} className="text-gray-700" />
+          </button>
         </header>
         <div className="flex-1 overflow-y-auto p-4">
           <div className="max-w-3xl mx-auto space-y-6 w-full px-2 sm:px-4">
@@ -192,6 +212,7 @@ const HomeComponents = () => {
                 value={message} 
                 onChange={(e) => setMessage(e.target.value)} 
                 onKeyDown={handleKeyEnter}
+                disabled={isDisableTextArea} 
                 placeholder="Please Enter your message"
                 className="w-full pr-24 pl-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               ></textarea>

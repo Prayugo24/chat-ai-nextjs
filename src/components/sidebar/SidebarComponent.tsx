@@ -5,26 +5,27 @@ import { faRightFromBracket, faFileCirclePlus, faTrash } from '@fortawesome/free
 import React from 'react';
 import { IMessage } from "@/pages/Home/HomeComponents";
 import { useSideBar } from "@/hooks/useSidebar";
+import auraChatLogo from "../../assets/images/AuraChat.png"
 
-interface ISidebarComponent {
+export interface ISidebarComponent {
     isSidebarOpen: boolean;
     messages: IMessage[];
     setIsSidebarOpen: (isOpen : boolean) => void;
     setMessages: (messages: IMessage[]) => void;
     setIsSave: (isSave: boolean) => void;
-
+    setIsHiddenMenuMobile:(isOpen : boolean) => void;
 }
 
 export const SidebarComponents = (
-  {isSidebarOpen, messages ,setIsSidebarOpen, setMessages, setIsSave} : ISidebarComponent
+  {isSidebarOpen, messages ,setIsSidebarOpen, setMessages, setIsSave, setIsHiddenMenuMobile} : ISidebarComponent
 ) => {
     const { 
       handleNewChat,
       deleteAllChatSessions, 
       deleteChatSession, 
       groupedChats, 
-      loadChatSession
-    } = useSideBar(messages, setMessages, setIsSave)
+      loadChatSession,
+    } = useSideBar(messages, setMessages, setIsSave, setIsHiddenMenuMobile)
     
     return (
       <nav
@@ -34,11 +35,9 @@ export const SidebarComponents = (
         >
           <div className="flex p-4 border-b border-gray-200">
             <Image
-              src="https://ai-public.creatie.ai/gen_page/logo_placeholder.png"
+              src={auraChatLogo}
               alt="DeepSeek"
-              width={32}
-              height={32}
-              className="h-8 gap-6"
+              className="w-[210px] h-auto gap-6"
             />
             <button 
               className="ml-auto" 
@@ -153,11 +152,12 @@ export const SidebarComponents = (
                 className="w-10 h-10 rounded-full"
               />
               <div className="flex-1">
-                <div className="font-medium">My Profile</div>
+                <div className="font-medium">By Developers</div>
                 <div className="text-sm text-gray-500">Personal</div>
               </div>
             </div>
           </div>
+
         </nav>
     )
 }
