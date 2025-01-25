@@ -2,7 +2,7 @@ import { IMessage } from "@/pages/Home/HomeComponents";
 import { useEffect, useState } from 'react';
 
 
-interface IChatSession {
+export interface IChatSession {
   id: string;
   messages: IMessage[]; 
   timestamp: string;
@@ -14,7 +14,8 @@ export const useSideBar = (
     message: IMessage[],
     setMessages: (messages: IMessage[]) => void,
     setIsSave: (isSave: boolean) => void,
-    setIsHiddenMenuMobile:(isOpen : boolean) => void
+    setIsHiddenMenuMobile:(isOpen : boolean) => void,
+    startTypingEffect:(message: string) => void
 ) =>{
     const [chatHistory, setChatHistory] = useState<IChatSession[]>([]);
     
@@ -76,6 +77,7 @@ export const useSideBar = (
         localStorage.setItem('chatHistory', JSON.stringify(updatedChatHistory));
         setChatHistory(sortedChatHistory);
         setMessages([]);
+        startTypingEffect("Hi! Nice to talk to you. Can I help you? 😄")
         setIsSave(false)
         setIsHiddenMenuMobile(true)
     };

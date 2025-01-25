@@ -6,6 +6,8 @@ import React from 'react';
 import { IMessage } from "@/pages/Home/HomeComponents";
 import { useSideBar } from "@/hooks/useSidebar";
 import auraChatLogo from "../../assets/images/AuraChat.png"
+import { HistoryComponents } from "./HistoryComponent";
+import { ProfileComponent } from "./ProfileComponent";
 
 export interface ISidebarComponent {
     isSidebarOpen: boolean;
@@ -14,18 +16,22 @@ export interface ISidebarComponent {
     setMessages: (messages: IMessage[]) => void;
     setIsSave: (isSave: boolean) => void;
     setIsHiddenMenuMobile:(isOpen : boolean) => void;
+    startTypingEffect:(message: string) => void
 }
 
 export const SidebarComponents = (
-  {isSidebarOpen, messages ,setIsSidebarOpen, setMessages, setIsSave, setIsHiddenMenuMobile} : ISidebarComponent
+  {
+    isSidebarOpen, messages ,setIsSidebarOpen, setMessages, setIsSave, 
+    setIsHiddenMenuMobile, startTypingEffect
+  } : ISidebarComponent
 ) => {
     const { 
       handleNewChat,
       deleteAllChatSessions, 
       deleteChatSession, 
       groupedChats, 
-      loadChatSession,
-    } = useSideBar(messages, setMessages, setIsSave, setIsHiddenMenuMobile)
+      loadChatSession
+    } = useSideBar(messages, setMessages, setIsSave, setIsHiddenMenuMobile, startTypingEffect)
     
     return (
       <nav
@@ -53,111 +59,27 @@ export const SidebarComponents = (
             New chat
           </button>
           
+          <HistoryComponents 
+            loadChatSession={loadChatSession}
+            deleteChatSession={deleteChatSession}
+            groupedChats={groupedChats}
+          />
+          <div className="absolute bottom-0 left-0 right-0">
+              <button
+                  onClick={deleteAllChatSessions}
+                  className="m-5 rounded-button flex items-center w-[87%] 
+                  justify-center gap-2 bg-yellow-600 text-white py-2 px-4
+                    hover:bg-red-600 transition-colors"
+              >
+              <FontAwesomeIcon icon={faTrash} />
+              Delete All History
+              </button>
 
-          <div className="flex-1 overflow-y-auto px-2">
-           {/* Today */}
-              {groupedChats.today.length > 0 && (
-                <div className="text-sm text-gray-500 px-2 mb-2">Today</div>
-              )}
-              {groupedChats.today.map((session) => (
-                  <div
-                  key={session.id}
-                  onClick={() => loadChatSession(session.id)}
-                  className="hover:bg-gray-100 rounded-lg p-2 mb-2 cursor-pointer flex justify-between items-center">
-                    <div>
-                      <div className="text-sm text-gray-800">
-                        {session.messages && session.messages[0]?.text || "New Chat"}
-                      </div>
-                    </div>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        deleteChatSession(session.id);
-                      }}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                  </div>
-              
-                  
-              ))}
-
-            {/* Yesterday */}
-              {groupedChats.yesterday.length > 0 && (
-                <div className="text-sm text-gray-500 px-2 mb-2">Yesterday</div>
-              )}
-              {groupedChats.yesterday.map((session) => (
-                <div
-                  key={session.id}
-                  onClick={() => loadChatSession(session.id)}
-                  className="hover:bg-gray-100 rounded-lg p-2 mb-2 cursor-pointer flex justify-between items-center">
-                  <div>
-                    <div className="text-sm text-gray-800">
-                      {session.messages && session.messages[0]?.text || "New Chat"}
-                    </div>
-                  </div>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      deleteChatSession(session.id);
-                    }}
-                    className="text-red-500 hover:text-red-700"
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                  </button>
-                </div>
-              ))}
-
-            {/* 7 Days */}
-              {groupedChats.last7Days.length > 0 && (
-                <div className="text-sm text-gray-500 px-2 mb-2">7 Days</div>
-              )}
-              {groupedChats.last7Days.map((session) => (
-                <div
-                  key={session.id}
-                  onClick={() => loadChatSession(session.id)}
-                  className="hover:bg-gray-100 rounded-lg p-2 mb-2 cursor-pointer flex justify-between items-center"
-                >
-                  <div>
-                    <div className="text-sm text-gray-800">
-                      {session.messages && session.messages[0]?.text || "New Chat"}
-                    </div>
-                  </div>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      deleteChatSession(session.id);
-                    }}
-                    className="text-red-500 hover:text-red-700"
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                  </button>
-                </div>
-              ))}
-          </div>
-          <button 
-            onClick={deleteAllChatSessions}
-            className="m-4 rounded-button flex items-center justify-center gap-2 bg-yellow-600 text-white py-2 px-4 hover:bg-red-600 transition-colors">
-            <FontAwesomeIcon icon={faTrash} />
-            Delete All History
-          </button>
-          <div className="p-4 border-t border-gray-200">
-            <div className="flex items-center gap-3">
-              <Image
-                alt="my profile"
-                width={32}
-                height={32}
-                src="https://lh3.googleusercontent.com/a/ACg8ocIHL2FgNVTPbLbGELimDkVMhr0Y8CRnckgwN_l1Dg9cKNhA2HT8=s96-c"
-                className="w-10 h-10 rounded-full"
-              />
-              <div className="flex-1">
-                <div className="font-medium">By Developers</div>
-                <div className="text-sm text-gray-500">Personal</div>
+              <div className="p-4 border-t border-gray-200 items-baseline bg-white">
+                  <ProfileComponent/>
               </div>
-            </div>
           </div>
-
+        
         </nav>
     )
 }
