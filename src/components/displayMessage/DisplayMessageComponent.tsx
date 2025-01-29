@@ -1,9 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars  } from '@fortawesome/free-solid-svg-icons';
-import { IMessage } from '@/pages/Home/HomeComponents';
+import { IMessage, ITypingText2 } from '@/pages/Home/HomeComponents';
 import Image from "next/image"
 import iconChat from "../../assets/images/iconChat2.png"
 import { ChatBoxComponent } from '../chatBox/ChatBoxComponent';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { darcula } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import CodeBlockWithBanner from '../codeBlock/CodeBlockWithBanner';
+
 
 export interface IDisplayMessageComponent {
     isHiddenMenuMobile: boolean
@@ -19,8 +23,13 @@ export interface IDisplayMessageComponent {
     setMessage: (message:string) => void,
     handlePaperclipClick: () => void
     handleKeyEnter: (e : React.KeyboardEvent<HTMLTextAreaElement>) => void
+    extractCodeBlocks:(text: string) => any[]
     
 }
+
+
+
+
 
 
 export const DisplayMessageComponent = (
@@ -28,11 +37,13 @@ export const DisplayMessageComponent = (
         isHiddenMenuMobile, messages,isLoading,
         typingText, isSave, message, isDisableTextArea,
         showPopup, handleSendMessage,setIsHiddenMenuMobile,
-        setMessage, handlePaperclipClick, handleKeyEnter
+        setMessage, handlePaperclipClick, handleKeyEnter, extractCodeBlocks
     }: IDisplayMessageComponent
 ) => {
+  console.log(typingText)
     return (
         <main className="flex-1 flex flex-col h-full relative">
+          
         <header className="flex p-4  sm:p-6 md:p-4 z-20 justify-between">
           {/* <h1 className="text-lg font-medium"></h1> */}
           <button 
@@ -44,13 +55,13 @@ export const DisplayMessageComponent = (
         <div className="flex-1 overflow-y-auto p-4">
           <div className="max-w-3xl mx-auto space-y-6 w-full px-2 sm:px-4">
             {/* Pesan dari sistem */}
+            
             {messages.map((msg, index) => (
               <div
                 key={index}
                 className={`flex gap-4 ${
                   msg.sender === 'user' ? 'justify-end' : 'justify-start'
-                }`}
-              >
+                }`}>
                 {msg.sender === 'system' && (
                   <Image
                     alt='system icon'
@@ -60,19 +71,25 @@ export const DisplayMessageComponent = (
                     className="w-10 h-10 rounded-full flex-shrink-0"
                   />
                 )}
-                <div
+                <div 
                   className={`message-bubble ${
                     msg.sender === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-800'
-                  } rounded-lg p-4 max-w-[70%] break-words whitespace-pre-wrap`}
-                >
-                  {msg.sender === 'system' ? (
-                    <div>
-                      <p>{msg.text}</p>
-                    </div>
-                  ) : (
-                    <p>{msg.text}</p>
+                  } rounded-lg p-4 max-w-[70%] break-words whitespace-pre-wrap`}>
+                  {extractCodeBlocks(msg.text).map((part: any, partIndex: any) => (
+                    part.type === 'text' ? (
+                      <p key={partIndex}>{part.content}</p>
+                    ) : (
                     
-                  )}
+                      <CodeBlockWithBanner
+                        key={partIndex}
+                        code={part.content}
+                        language={part.language as string}
+                        bannerText={part.language as string}
+                        bannerColor="bg-gray-600"
+                      />
+                    )
+                  ))}
+                  
                 </div>
               </div>
             ))}
@@ -105,7 +122,20 @@ export const DisplayMessageComponent = (
                   className="w-10 h-10 rounded-full flex-shrink-0"
                 />
                 <div className="bg-gray-100 text-gray-800 rounded-lg p-4 max-w-[70%] break-words whitespace-pre-wrap">
-                  <p>{typingText}</p>
+                {extractCodeBlocks(typingText).map((part, partIndex) =>
+                  part.type === 'text' ? (
+                    <p key={partIndex}>{part.content}</p>
+                  ) : (
+                    <CodeBlockWithBanner
+                      key={partIndex}
+                      code={part.content}
+                      language={part.language as string}
+                      bannerText={part.language as string}
+                      bannerColor="bg-gray-600"
+                    />
+                  )
+                )}
+                  
                 </div>
               </div>
             )}

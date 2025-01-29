@@ -9,9 +9,13 @@ export class AIServices {
             const result = await client.predict("/chat", {
               message: message,
             });
-            console.log(result)
-            return result.data
-
+            
+            const apiResponse: string = result.data as string;
+            
+            const cleanedText: string = apiResponse[0].replace(/<think>[\s\S]*?<\/think>\n*/g, '').trim();
+            console.log("apiResponse",apiResponse)
+            return cleanedText.trim()
+            
         }catch(error) {
             console.log("error", error)
             return null

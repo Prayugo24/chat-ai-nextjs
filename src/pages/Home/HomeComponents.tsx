@@ -5,7 +5,8 @@ import iconChat from "../../assets/images/iconChat2.png"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SidebarMiniComponent } from '@/components/sidebar/SidebarMiniComponent';
 import { SidebarComponents } from '@/components/sidebar/SidebarComponent';
-import { faBars  } from '@fortawesome/free-solid-svg-icons';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { darcula } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
 
 
@@ -20,6 +21,10 @@ export interface IMessage {
   text: string;
   sender: 'user' | 'system';
 }
+export interface ITypingText2 {
+  text: string
+  type: 'code' | 'text';
+}
 
 const HomeComponents = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -29,12 +34,13 @@ const HomeComponents = () => {
   const [showPopup, setShowPopup] = useState<boolean>(false); 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isDisableTextArea, setisDisableTextArea] = useState<boolean>(false);
-  const [typingText, setTypingText] = useState<string>(""); // State untuk efek typing
+  const [typingText, setTypingText] = useState<string>("");
+
   const [isHiddenMenuMobile, setIsHiddenMenuMobile] = useState(true)
   
   const {
     toggleSidebar, handleSendMessage, startTypingEffect,
-    handleKeyEnter, handlePaperclipClick
+    handleKeyEnter, handlePaperclipClick, extractCodeBlocks
   } = useChatBox(setMessages, 
       setMessage, setTypingText,setShowPopup, 
       setisDisableTextArea, setIsLoading, setIsSidebarOpen,
@@ -42,7 +48,7 @@ const HomeComponents = () => {
 
 
   useEffect(()=> {
-    startTypingEffect("Hi! Nice to talk to you. Can I help you? 😄")
+    startTypingEffect("Hi! Nice to talk to you. Can I help you? 😄 ")
   },[])
 
   
@@ -89,8 +95,11 @@ const HomeComponents = () => {
         setIsHiddenMenuMobile={setIsHiddenMenuMobile}
         setMessage={setMessage}
         handlePaperclipClick={handlePaperclipClick}
-        handleKeyEnter={handleKeyEnter}
+        handleKeyEnter={handleKeyEnter} 
+        extractCodeBlocks={extractCodeBlocks}
       />
+
+
       
     </div>
   );
