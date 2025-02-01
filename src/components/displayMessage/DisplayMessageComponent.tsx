@@ -1,12 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars  } from '@fortawesome/free-solid-svg-icons';
-import { IMessage, ITypingText2 } from '@/pages/Home/HomeComponents';
+import { IMessage } from '@/pages/Home/HomeComponents';
 import Image from "next/image"
 import iconChat from "../../assets/images/iconChat2.png"
 import { ChatBoxComponent } from '../chatBox/ChatBoxComponent';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { darcula } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import CodeBlockWithBanner from '../codeBlock/CodeBlockWithBanner';
+import { useEffect, useRef } from 'react';
 
 
 export interface IDisplayMessageComponent {
@@ -40,7 +39,17 @@ export const DisplayMessageComponent = (
         setMessage, handlePaperclipClick, handleKeyEnter, extractCodeBlocks
     }: IDisplayMessageComponent
 ) => {
-  console.log(typingText)
+
+    const messagesEndRef = useRef<HTMLDivElement>(null)
+
+    const scrollToBottom = () => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+
+    useEffect(() => {
+      scrollToBottom();
+  }, [messages, typingText]);
+  
     return (
         <main className="flex-1 flex flex-col h-full relative">
           
@@ -139,6 +148,8 @@ export const DisplayMessageComponent = (
                 </div>
               </div>
             )}
+            <div ref={messagesEndRef} />
+
           </div>
           
         </div>

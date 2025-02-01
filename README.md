@@ -13,6 +13,6 @@ First, run the development server:
 > after that you can follow this action
 ```bash
 pnpm install
-pnpm run dev
+pnpm dev
 
 ```

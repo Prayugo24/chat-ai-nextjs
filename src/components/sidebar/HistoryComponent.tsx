@@ -30,13 +30,13 @@ export const HistoryComponents = (
                 className="hover:bg-gray-100 rounded-lg p-2 mb-2 cursor-pointer flex justify-between items-center">
                 <div>
                     <div className="text-sm text-gray-800">
-                    {session.messages && session.messages[0]?.text || "New Chat"}
+                    {session.messages && session.messages[1]?.text || "New Chat"}
                     </div>
                 </div>
                 <button
                     onClick={(e) => {
-                    e.stopPropagation();
-                    deleteChatSession(session.id);
+                        e.stopPropagation();
+                        deleteChatSession(session.id);
                     }}
                     className="text-red-500 hover:text-red-700"
                 >
@@ -58,7 +58,7 @@ export const HistoryComponents = (
                 className="hover:bg-gray-100 rounded-lg p-2 mb-2 cursor-pointer flex justify-between items-center">
                 <div>
                 <div className="text-sm text-gray-800">
-                    {session.messages && session.messages[0]?.text || "New Chat"}
+                    {session.messages && session.messages[1]?.text || "New Chat"}
                 </div>
                 </div>
                 <button
@@ -85,7 +85,7 @@ export const HistoryComponents = (
             >
                 <div>
                     <div className="text-sm text-gray-800">
-                        {session.messages && session.messages[0]?.text || "New Chat"}
+                        {session.messages && session.messages[1]?.text || "New Chat"}
                     </div>
                 </div>
                 <button

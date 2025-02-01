@@ -34,7 +34,7 @@ export const ChatBoxComponent = (
                 onKeyDown={handleKeyEnter}
                 disabled={isDisableTextArea} 
                 placeholder="Please Enter your message"
-                className="w-full pr-24 pl-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full pr-24 pl-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-black"
               ></textarea>
               <div className="absolute right-2 bottom-2 flex items-center gap-1 sm:gap-2 flex-wrap">
               {showPopup && (
@@ -60,7 +60,7 @@ export const ChatBoxComponent = (
               </div>
             </div>
             <div className="text-xs text-gray-400 mt-2 text-center">
-              AI-generated, for reference only
+              AI-generated, Developer by Prayugo
             </div>
           </div>
         </div>

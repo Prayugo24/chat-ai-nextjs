@@ -46,6 +46,7 @@ export const useChatBox = (
 
             } catch (error) {
                 console.error("Error sending message:", error);
+                startTypingEffect("Oops... it seems our server is having problems wait a few more moments......")
                 setIsLoading(false);
             }
         }
