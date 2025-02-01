@@ -68,7 +68,7 @@ export const DisplayMessageComponent = (
             {messages.map((msg, index) => (
               <div
                 key={index}
-                className={`flex gap-4 ${
+                className={`flex ${
                   msg.sender === 'user' ? 'justify-end' : 'justify-start'
                 }`}>
                 {msg.sender === 'system' && (
